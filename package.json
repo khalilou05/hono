@@ -1,5 +1,5 @@
 {
-  "name": "hono",
+  "name": "backend",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
