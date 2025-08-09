@@ -1,13 +1,7 @@
 import { Hono } from "hono";
-import type { Product } from "../types/product";
+import { Product } from "../types/product";
 
-type Bindings = {
-  DB: D1Database;
-  CACHE: KVNamespace;
-  BUCKET: R2Bucket;
-};
-
-const products = new Hono<{ Bindings: Bindings }>();
+const products = new Hono<{ Bindings: Env }>();
 
 products.get("/:slug", async (c) => {
   const slug = c.req.param("slug");
@@ -22,8 +16,13 @@ products.get("/:slug", async (c) => {
   return c.text("not found", 404);
 });
 
-products.post("/products", async (c) => {
-  const data = await c.req.json();
+products.post("", async (c) => {
+  const data = await c.req.json<Product>();
+  const prdstmt = c.env.DB.prepare(
+    "INSERT INTO products (id,name) VALUES (?,?)"
+  ).bind(data.id, data.name);
+
+  await c.env.DB.batch([prdstmt]);
 });
 
 export default products;

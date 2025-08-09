@@ -3,16 +3,8 @@
   "name": "backend",
   "main": "src/index.ts",
   "compatibility_date": "2025-08-05",
-  "env": {
-    "production": {
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "test",
-          "database_id": ""
-        }
-      ]
-    }
+  "vars": {
+    "DEV_MODE": true
   },
 
   "d1_databases": [
@@ -21,12 +13,25 @@
       "database_name": "test",
       "database_id": ""
     }
-  ]
-  // "ai": {
-  //   "binding": "AI"
-  // },
-  // "observability": {
-  //   "enabled": true,
-  //   "head_sampling_rate": 1
-  // }
+  ],
+  "r2_buckets": [
+    {
+      "bucket_name": "BUCKET",
+      "binding": "BUCKET"
+    }
+  ],
+  "env": {
+    "production": {
+      "vars": {
+        "DEV_MODE": false
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "test",
+          "database_id": ""
+        }
+      ]
+    }
+  }
 }

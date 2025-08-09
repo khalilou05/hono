@@ -5,11 +5,12 @@ import { cors } from "hono/cors";
 import media from "../routes/media";
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+  fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const app = new Hono().basePath("/api");
-    if (env.NODE_ENV === "DEV") {
+    if (env.DEV_MODE) {
       app.use(cors({ origin: "http://localhost:3000" }));
     }
+
     app.route("/products", products);
     app.route("/categorys", categorys);
     app.route("/media", media);
