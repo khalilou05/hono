@@ -11,7 +11,13 @@
     {
       "binding": "DB",
       "database_name": "test",
-      "database_id": ""
+      "database_id": "local"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "089ba2fb5b3e43e493525b1544cb100b"
     }
   ],
   "r2_buckets": [
@@ -31,7 +37,10 @@
           "database_name": "test",
           "database_id": ""
         }
-      ]
+      ],
+      "unsafe": {
+        "bindings": []
+      }
     }
   }
 }

@@ -1,10 +1,17 @@
 export interface Product {
   id: string;
   name: string;
-  items: Items[];
+  options: Option[];
 }
 
-interface Items {
+interface Option {
+  id: string;
+  name: string;
+  isCustom: boolean;
+  items: OptionItem[];
+}
+
+interface OptionItem {
   id: string;
   name: string;
 }

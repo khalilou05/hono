@@ -1,4 +1,6 @@
 export const config = {
   maxBolbSize: 5000,
-  maxFilePerUpload: 10,
+  maxFileUpload: 10,
+  LoginMaxAttemp: 3,
+  maxAiReq: 20,
 } as const;
