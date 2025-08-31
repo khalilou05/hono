@@ -10,27 +10,36 @@ products.get("/:slug", async (c) => {
     .first();
 
   if (query) {
-    return c.json(query);
+    return c.text("", 200);
   }
 
   return c.text("not found", 404);
 });
 
 products.post("/add", async (c) => {
-  const product = await c.req.json<Product>();
-  const prdstmt = c.env.DB.prepare(
-    "INSERT INTO products (id,name) VALUES (?,?)"
-  ).bind(product.id, product.name);
-  const optionsStmt: D1PreparedStatement[] = [];
-  for (const option of product.options) {
-    optionsStmt.push(
-      c.env.DB.prepare(
-        "INSERT INTO product_options (id,name) VALUES (?,?)"
-      ).bind(option.id, option.name)
-    );
-  }
+  try {
+    const product = await c.req.json<Product>();
+    const prdstmt = c.env.DB.prepare(
+      "INSERT INTO products (id,name) VALUES (?,?)"
+    ).bind(product.id, product.name);
+    const optStmt = product.options.flatMap((opt) => {
+      return opt.isCustom
+        ? [
+            c.env.DB.prepare("INSERT INTO option VALUES(?,?)").bind(
+              opt.id,
+              opt.name
+            ),
+          ]
+        : c.env.DB.prepare("INSERT INTO product_option VALUES(?,?)").bind(
+            opt.id,
+            opt.name
+          );
+    });
 
-  await c.env.DB.batch([prdstmt, ...optionsStmt]);
+    await c.env.DB.batch([prdstmt, ...optStmt]);
+  } catch (r) {
+    return c.text("somthing go wrong");
+  }
 });
 
 products.post("/delete", async (c) => {
